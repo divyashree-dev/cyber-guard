@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CyberShield - Cyber Safety & Digital Fraud Defense</title>
+    <meta name="description" content="CyberShield is your modern mobile app for cyber safety, phishing link detection, SMS fraud checking, scam call awareness, and digital fraud prevention.">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="app-viewport">
+    <!-- Top Navigation Header -->
+    <header class="top-navbar">
+        <div class="brand-container">
+            <div class="brand-logo">🛡️</div>
+            <div>
+                <div class="brand-title" data-i18n="appName">CyberShield</div>
+                <div class="brand-sub">FraudGuard & Cyber Rakshak</div>
+            </div>
+        </div>
+
+        <div class="header-actions">
+            <select id="languageSelect" class="select-lang" aria-label="Select Language">
+                <option value="en">English</option>
+                <option value="hi">हिंदी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+            </select>
+            <button id="toggleLayoutBtn" class="layout-toggle-btn" title="Toggle Mobile/Desktop View">
+                <span>📱</span> Mobile View
+            </button>
+        </div>
+    </header>
+
+    <!-- App Content Wrapper -->
+    <main id="appContainer" class="app-container">
+
+        <!-- ==================== 1. HOME DASHBOARD ==================== -->
+        <section id="screen-home" class="app-screen active">
+            <!-- Emergency Warning Banner -->
+            <div class="emergency-banner">
+                <div class="emergency-left">
+                    <div class="emergency-icon">🚨</div>
+                    <div>
+                        <div class="emergency-title" data-i18n="emergencyWarningTitle">Emergency Cyber Warning</div>
+                        <div class="emergency-text" data-i18n="emergencyWarningText">
+                            Never share OTP, UPI PIN, Bank CVV, or Screen-Sharing Access with anyone. Banks & Police NEVER ask for OTP over call.
+                        </div>
+                    </div>
+                </div>
+                <a href="tel:1930" class="btn-emergency-call">
+                    📞 <span data-i18n="callHelpline">Call 1930 Helpline</span>
+                </a>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Safety Score Dial Widget -->
+                <div class="widget-card">
+                    <div class="score-widget-content">
+                        <h3 class="form-label" data-i18n="safetyScoreLabel">Cyber Safety Score</h3>
+                        <div class="gauge-canvas-wrapper">
+                            <canvas id="scoreGaugeCanvas" width="180" height="150"></canvas>
+                            <div class="score-number-overlay">
+                                <span id="scoreValueDisplay" class="score-value">88</span>
+                                <span class="score-max">/100</span>
+                            </div>
+                        </div>
+                        <div id="scoreBadgeTag" class="score-badge safe">STRONG PROTECTION</div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 10px;" data-i18n="scoreStatusHigh">
+                            Strong Shield active. You are practicing safe digital habits.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- User Badges & Progress Widget -->
+                <div class="widget-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h3 class="form-label">Gamified Shield XP</h3>
+                        <span id="userXpDisplay" class="badge-item" style="font-size: 0.9rem;">350 XP</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+                        Earn XP and security badges by checking links, completing quizzes, and reporting scams.
+                    </p>
+                    <div id="userBadgesList" class="badges-row">
+                        <!-- Populated by JS -->
+                    </div>
+                    <button class="btn btn-outline" style="width: 100%; margin-top: 14px;" onclick="switchScreen('academy')">
+                        🎓 Open Cyber Academy
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Actions Grid -->
+            <div class="widget-card" style="margin-bottom: 24px;">
+                <h3 class="form-label" style="margin-bottom: 16px;">Quick Threat Checkers</h3>
+                <div class="quick-action-grid">
+                    <div class="quick-action-btn" data-target="scanner">
+                        <span class="quick-action-icon">🔗</span>
+                        <span class="quick-action-label" data-i18n="scanLinkBtn">Scan Link</span>
+                    </div>
+                    <div class="quick-action-btn" data-target="scanner">
+                        <span class="quick-action-icon">📷</span>
+                        <span class="quick-action-label" data-i18n="scanQrBtn">Scan QR</span>
+                    </div>
+                    <div class="quick-action-btn" data-target="sms">
+                        <span class="quick-action-icon">💬</span>
+                        <span class="quick-action-label" data-i18n="checkMessageBtn">Check SMS</span>
+                    </div>
+                    <div class="quick-action-btn" data-target="phone">
+                        <span class="quick-action-icon">📞</span>
+                        <span class="quick-action-label" data-i18n="phoneLookupBtn">Scam Calls</span>
+                    </div>
+                    <div class="quick-action-btn" data-target="payment">
+                        <span class="quick-action-icon">💳</span>
+                        <span class="quick-action-label" data-i18n="paymentSafetyBtn">Payment Safety</span>
+                    </div>
+                    <div class="quick-action-btn" data-target="reports">
+                        <span class="quick-action-icon">🚨</span>
+                        <span class="quick-action-label" data-i18n="reportScamBtn">Report Scam</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Scam Alerts & Trends -->
+            <div class="widget-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3 class="form-label" data-i18n="recentAlertsTitle">Live Scam Trends & Alerts</h3>
+                    <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem;" onclick="loadRecentTrendsFeed()">🔄 Refresh</button>
+                </div>
+                <div id="recentTrendsContainer">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 2. LINK & WEBSITE SCANNER ==================== -->
+        <section id="screen-scanner" class="app-screen">
+            <div class="widget-card">
+                <h2 class="modal-title" data-i18n="phishingDetectorTitle">Link & Website Threat Scanner</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Paste any suspicious link, URL, or scan a QR code to analyze phishing indicators, domain spoofs, and security risks.
+                </p>
+
+                <div class="form-group">
+                    <label for="urlInput" class="form-label">Website URL or Link:</label>
+                    <input type="text" id="urlInput" class="form-input" placeholder="e.g. http://sbi-kyc-verification.xyz or paste link">
+                </div>
+
+                <div class="presets-row">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Test Presets:</span>
+                    <button class="preset-chip preset-url-btn" data-url="http://sbi-kyc-verification-online.xyz">Phishing Bank Link</button>
+                    <button class="preset-chip preset-url-btn" data-url="http://192.168.1.50/bank/login.php">IP Address Link</button>
+                    <button class="preset-chip preset-url-btn" data-url="bit.ly/claim-lottery-2026">Shortened Link</button>
+                    <button class="preset-chip preset-url-btn" data-url="https://www.google.com">Safe Google URL</button>
+                </div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button id="scanUrlBtn" class="btn btn-primary" style="flex: 1;">🔍 Analyze Link Threat</button>
+                    <button class="btn btn-secondary" onclick="showToast('Camera QR scanning active. Point camera at QR code.', 'info')">📷 Scan QR Code</button>
+                </div>
+
+                <div id="urlResultContainer" style="display: none;"></div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 3. SMS / MESSAGE SCAM CHECKER ==================== -->
+        <section id="screen-sms" class="app-screen">
+            <div class="widget-card">
+                <h2 class="modal-title" data-i18n="smsCheckerTitle">SMS & Message Fraud Detector</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Copy & paste suspicious SMS messages, WhatsApp chats, or job offers to detect scam patterns.
+                </p>
+
+                <div class="form-group">
+                    <label for="smsInput" class="form-label">Message Content:</label>
+                    <textarea id="smsInput" class="form-textarea" placeholder="Paste SMS or chat text here..."></textarea>
+                </div>
+
+                <div class="presets-row">
+                    <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Test Presets:</span>
+                    <button class="preset-chip preset-sms-btn" data-text="Dear Customer, your SBI account is blocked today. Please update your KYC immediately at http://sbi-kyc.xyz or call 9876543210.">Bank KYC Freeze SMS</button>
+                    <button class="preset-chip preset-sms-btn" data-text="Urgent: Your electricity will be disconnected tonight at 9:30 PM due to unpaid bill. Call officer at 9123456789 or install update.apk immediately.">Electricity Cut-off SMS</button>
+                    <button class="preset-chip preset-sms-btn" data-text="Earn ₹5000/day by liking YouTube videos! No experience needed. Join Telegram group now.">Fake Job Offer</button>
+                    <button class="preset-chip preset-sms-btn" data-text="Customer support agent instructed you to download AnyDesk app to process your ₹10 gas refund.">Remote Access Trap</button>
+                </div>
+
+                <button id="checkSmsBtn" class="btn btn-primary" style="width: 100%;">💬 Detect Message Fraud</button>
+
+                <div id="smsResultContainer" style="display: none;"></div>
+
+                <div style="margin-top: 20px; padding: 12px; background: rgba(59, 130, 246, 0.1); border-radius: var(--radius-md); font-size: 0.8rem; color: var(--text-muted);">
+                    🔒 <strong>Privacy Guarantee:</strong> CyberShield processes message analysis 100% locally on your device. Messages are never uploaded to any remote server without explicit consent.
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 4. SCAM CALL AWARENESS ==================== -->
+        <section id="screen-phone" class="app-screen">
+            <div class="widget-card" style="margin-bottom: 20px;">
+                <h2 class="modal-title" data-i18n="scamCallTitle">Scam Call & Phone Number Directory</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Search numbers reported by community members for fake police calls, digital arrest threats, or bank impersonations.
+                </p>
+
+                <div class="form-group">
+                    <label for="phoneSearchInput" class="form-label">Phone Number Search:</label>
+                    <input type="text" id="phoneSearchInput" class="form-input" placeholder="e.g. +91 98765 43210 or 9876543210">
+                </div>
+
+                <button id="searchPhoneBtn" class="btn btn-primary" style="width: 100%;">🔍 Search Phone Directory</button>
+
+                <div id="phoneSearchResult" style="display: none;"></div>
+            </div>
+
+            <!-- Post-Call Safety Checklist -->
+            <div class="widget-card">
+                <h3 class="form-label" style="font-size: 1.1rem; margin-bottom: 12px;">📋 Post-Call Safety Checklist</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+                    Answer these quick questions if you just received an unknown or suspicious call:
+                </p>
+
+                <div class="checklist-questions">
+                    <div style="margin-bottom: 12px;">
+                        <label><input type="checkbox" id="chk_q1"> Did the caller ask for your OTP, UPI PIN, or bank card CVV?</label>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label><input type="checkbox" id="chk_q2"> Did they instruct you to install AnyDesk, TeamViewer, or QuickSupport?</label>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label><input type="checkbox" id="chk_q3"> Did they claim you are under 'Digital Arrest' or threaten police action?</label>
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label><input type="checkbox" id="chk_q4"> Did they ask you to transfer money to a 'safety locker account'?</label>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <label><input type="checkbox" id="chk_q5"> Did they insist you must NOT disconnect or inform your family members?</label>
+                    </div>
+                </div>
+
+                <button id="submitChecklistBtn" class="btn btn-outline" style="width: 100%;">Evaluate Call Risk</button>
+
+                <div id="checklistResultContainer" style="display: none; margin-top: 16px;"></div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 5. PAYMENT SAFETY ==================== -->
+        <section id="screen-payment" class="app-screen">
+            <div class="widget-card" style="margin-bottom: 20px;">
+                <h2 class="modal-title" data-i18n="paymentChecklistTitle">Before You Pay Safety Checklist</h2>
+                
+                <div class="rule-box danger" style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger-red-border); padding: 16px; border-radius: var(--radius-md); margin-bottom: 20px;">
+                    <h4 style="color: #fca5a5; font-size: 1rem; margin-bottom: 8px;">💡 Golden Myth Buster Rule:</h4>
+                    <p style="font-size: 0.95rem; font-weight: 700; color: white;">
+                        You NEVER enter a UPI PIN to RECEIVE money into your account.
+                    </p>
+                    <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">
+                        Entering your UPI PIN ALWAYS deducts funds from your account. If a buyer on OLX/Marketplace asks you to enter your PIN to receive an advance, IT IS 100% A FRAUD!
+                    </p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 14px;">
+                    <div style="background: var(--bg-dark); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                        <strong>🚫 Rule #1: Never share OTP, UPI PIN, or CVV</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">No genuine representative will ever request confidential credentials.</p>
+                    </div>
+
+                    <div style="background: var(--bg-dark); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                        <strong>🚫 Rule #2: Do not scan QR codes to receive money</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">QR codes are strictly used to MAKE payments, not receive them.</p>
+                    </div>
+
+                    <div style="background: var(--bg-dark); padding: 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                        <strong>🚫 Rule #3: Never share screen during money transfer</strong>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">Disconnect remote access tools (AnyDesk, QuickSupport) before opening banking apps.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="widget-card">
+                <h3 class="form-label">UPI ID & Handle Security Check</h3>
+                <div class="form-group">
+                    <input type="text" id="upiCheckInput" class="form-input" placeholder="e.g. refund-sbi@upi or paytm-desk@ybl">
+                </div>
+                <button class="btn btn-primary" onclick="showToast('UPI ID clear of known fraud reports. Verify beneficiary name.', 'success')">Verify UPI ID Handle</button>
+            </div>
+        </section>
+
+
+        <!-- ==================== 6. REPORT A SCAM ==================== -->
+        <section id="screen-reports" class="app-screen">
+            <div class="widget-card" style="margin-bottom: 20px;">
+                <h2 class="modal-title" data-i18n="reportFormTitle">Report a Cyber Crime / Fraud Incident</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Help protect others by reporting fraudulent links, scam calls, UPI handles, or fake job offers.
+                </p>
+
+                <form id="scamReportForm">
+                    <div class="form-group">
+                        <label for="reportTypeSelect" class="form-label">Scam Category:</label>
+                        <select id="reportTypeSelect" class="form-select" required>
+                            <option value="Phishing Link">Phishing Website / Link</option>
+                            <option value="Scam Phone Call">Scam Call / Phone Number</option>
+                            <option value="SMS Fraud">SMS / Message Scam</option>
+                            <option value="UPI Fraud">UPI ID / Payment Scam</option>
+                            <option value="Digital Arrest">Digital Arrest / Fake Police</option>
+                            <option value="Fake Job">Part-Time Job / Telegram Scam</option>
+                            <option value="Screen Sharing">Remote Access / AnyDesk Hijack</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportTargetInput" class="form-label">Scam Target (Phone / URL / UPI ID):</label>
+                        <input type="text" id="reportTargetInput" class="form-input" placeholder="e.g. +91 98765 43210 or http://sbi-kyc.xyz" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportDescInput" class="form-label">Incident Description:</label>
+                        <textarea id="reportDescInput" class="form-textarea" placeholder="Describe what happened, money lost (if any), and tactics used..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reportContactInput" class="form-label">Your Name / Contact (Optional):</label>
+                        <input type="text" id="reportContactInput" class="form-input" placeholder="Keep blank to report anonymously">
+                    </div>
+
+                    <button type="submit" class="btn btn-danger" style="width: 100%;">🚨 Submit Scam Report to Community</button>
+                </form>
+
+                <div style="margin-top: 20px; text-align: center;">
+                    <a href="https://cybercrime.gov.in" target="_blank" rel="noopener" class="btn btn-outline">
+                        🏛️ Official Portal: National Cyber Crime Reporting (cybercrime.gov.in)
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-card">
+                <h3 class="form-label" style="margin-bottom: 14px;">Recent Community Submitted Reports</h3>
+                <div id="communityReportsList">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 7. LEARN CYBER SAFETY ==================== -->
+        <section id="screen-academy" class="app-screen">
+            <div class="widget-card">
+                <h2 class="modal-title" data-i18n="academyTitle">Cyber Safety Academy & Quizzes</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Interactive lessons to master cyber resilience, spot fraud tactics, and earn security badges.
+                </p>
+
+                <div id="academyLessonsList" class="dashboard-grid">
+                    <!-- Lessons rendered dynamically -->
+                    <div class="widget-card" style="background: var(--bg-dark);">
+                        <h3>🔗 Phishing & Fake Links</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 8px 0;">Learn to spot fake bank websites and typosquatting domains.</p>
+                        <button class="btn btn-primary" onclick="showToast('Lesson Quiz Started! +50 XP on completion.', 'info')">Start Quiz & Lesson</button>
+                    </div>
+                    <div class="widget-card" style="background: var(--bg-dark);">
+                        <h3>🔐 OTP & KYC Fraud</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 8px 0;">Master the rules of OTP protection and banking safety.</p>
+                        <button class="btn btn-primary" onclick="showToast('Lesson Quiz Started! +50 XP on completion.', 'info')">Start Quiz & Lesson</button>
+                    </div>
+                    <div class="widget-card" style="background: var(--bg-dark);">
+                        <h3>⚖️ Digital Arrest Fraud</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 8px 0;">How scammers use video call police threats to coerce money.</p>
+                        <button class="btn btn-primary" onclick="showToast('Lesson Quiz Started! +50 XP on completion.', 'info')">Start Quiz & Lesson</button>
+                    </div>
+                    <div class="widget-card" style="background: var(--bg-dark);">
+                        <h3>📱 Remote Access Hijacking</h3>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 8px 0;">Understand why installing AnyDesk/TeamViewer is dangerous.</p>
+                        <button class="btn btn-primary" onclick="showToast('Lesson Quiz Started! +50 XP on completion.', 'info')">Start Quiz & Lesson</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 8. FAMILY PROTECTION ==================== -->
+        <section id="screen-family" class="app-screen">
+            <div class="widget-card">
+                <h2 class="modal-title" data-i18n="familyModeTitle">Family Protection Shield</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Enable family alert notifications to protect elderly family members when high-risk phishing attempts or scam calls are detected.
+                </p>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px; background: var(--bg-dark); border-radius: var(--radius-md); margin-bottom: 20px;">
+                    <div>
+                        <strong>Enable Family Safeguard Alerts</strong>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">Send emergency alerts to designated contact if high-risk threat encountered.</p>
+                    </div>
+                    <input type="checkbox" id="familyToggle" checked style="width: 22px; height: 22px;">
+                </div>
+
+                <h3 class="form-label">Trusted Family Members:</h3>
+                <div style="padding: 12px; background: var(--bg-dark); border-radius: var(--radius-md); margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>Father (+91 98112 23344)</strong>
+                        <span class="verdict-tag safe" style="font-size: 0.75rem; margin-left: 8px;">Active</span>
+                    </div>
+                    <button class="btn btn-outline" style="padding: 4px 10px; font-size: 0.8rem;" onclick="showToast('Test emergency alert sent to family contact!', 'success')">Test Alert</button>
+                </div>
+
+                <button class="btn btn-secondary" onclick="showToast('Add Family Member modal opened.', 'info')">➕ Add Family Contact</button>
+            </div>
+        </section>
+
+
+        <!-- ==================== 9. PRIVACY & PERMISSIONS ==================== -->
+        <section id="screen-privacy" class="app-screen">
+            <div class="widget-card">
+                <h2 class="modal-title" data-i18n="privacyDashboardTitle">Privacy & Permissions Center</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    CyberShield is built on a <strong>Privacy-First Local Processing Architecture</strong>. Your messages, banking details, and passwords are never stored or transmitted without consent.
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-dark); border-radius: var(--radius-md);">
+                        <div>
+                            <strong>Camera Permission (QR Code Scanning)</strong>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Used exclusively to scan URL QR codes locally.</p>
+                        </div>
+                        <span class="verdict-tag safe">GRANTED</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-dark); border-radius: var(--radius-md);">
+                        <div>
+                            <strong>Local Threat Intelligence Storage</strong>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Saves offline threat reports locally in browser memory.</p>
+                        </div>
+                        <span class="verdict-tag safe">ACTIVE</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--bg-dark); border-radius: var(--radius-md);">
+                        <div>
+                            <strong>Location Tracking</strong>
+                            <p style="font-size: 0.8rem; color: var(--text-muted);">Not required for cyber threat scanning.</p>
+                        </div>
+                        <span class="verdict-tag" style="background: rgba(255,255,255,0.1); color: var(--text-muted);">DISABLED</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== 10. ADMIN PORTAL ==================== -->
+        <section id="screen-admin" class="app-screen">
+            <div class="widget-card">
+                <h2 class="modal-title" data-i18n="adminTitle">Admin & Threat Intelligence Portal</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 18px;">
+                    Review community reports, verify blacklisted numbers/handles, and publish breaking scam trends.
+                </p>
+                <div id="adminPortalContent">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" data-target="home">
+            <span class="nav-icon">🏠</span>
+            <span>Home</span>
+        </div>
+        <div class="nav-item" data-target="scanner">
+            <span class="nav-icon">🔗</span>
+            <span>Scanner</span>
+        </div>
+        <div class="nav-item" data-target="sms">
+            <span class="nav-icon">💬</span>
+            <span>SMS Check</span>
+        </div>
+        <div class="nav-item" data-target="phone">
+            <span class="nav-icon">📞</span>
+            <span>Calls</span>
+        </div>
+        <div class="nav-item" data-target="reports">
+            <span class="nav-icon">🚨</span>
+            <span>Report</span>
+        </div>
+        <div class="nav-item" data-target="academy">
+            <span class="nav-icon">🎓</span>
+            <span>Academy</span>
+        </div>
+        <div class="nav-item" data-target="admin">
+            <span class="nav-icon">⚙️</span>
+            <span>Admin</span>
+        </div>
+    </nav>
+</div>
+
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- 1. Fraud Alert Warning Modal -->
+<div id="fraudAlertModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-content danger-modal">
+        <div style="font-size: 40px; margin-bottom: 10px;">🚨</div>
+        <h3 id="alertModalTitle" class="modal-title" style="color: #fca5a5;">High Fraud Risk Detected</h3>
+        
+        <div class="reasons-list">
+            <p id="alertModalReason" style="font-weight: 600; color: white; font-size: 0.95rem; margin-bottom: 12px;"></p>
+            <div class="safety-advice-box">
+                <strong>💡 Recommended Action:</strong>
+                <p id="alertModalAdvice"></p>
+            </div>
+        </div>
+
+        <div class="action-btn-row">
+            <button class="btn btn-danger" onclick="closeFraudAlertModal(); showToast('Threat blocked and reported!', 'success');">🚫 Block & Stop</button>
+            <button class="btn btn-outline" onclick="closeFraudAlertModal(); switchScreen('academy');">🎓 Learn How Scam Works</button>
+            <button class="btn btn-secondary" onclick="closeFraudAlertModal();">Dismiss</button>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Sandboxed Safe Preview Modal -->
+<div id="safePreviewModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-content">
+        <h3 class="modal-title">🔍 Sandboxed Safe Preview</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+            Target Host: <strong id="previewUrlDomain"></strong>
+        </p>
+        <div style="background: var(--bg-dark); padding: 12px; border-radius: var(--radius-md); font-family: monospace; font-size: 0.8rem; word-break: break-all; margin-bottom: 16px;" id="previewUrlText"></div>
+
+        <div style="border: 1px dashed var(--caution-yellow-border); padding: 12px; border-radius: var(--radius-md); margin-bottom: 16px; font-size: 0.85rem; color: #fbbf24;">
+            ⚠️ Sandboxed preview protects your device by blocking JavaScript execution, cookies, and form submissions.
+        </div>
+
+        <button class="btn btn-outline" style="width: 100%;" onclick="closeSafePreviewModal()">Close Safe Preview</button>
+    </div>
+</div>
+
+<!-- Application Scripts -->
+<script src="js/db.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/scanner.js"></script>
+<script src="js/sms_checker.js"></script>
+<script src="js/phone_lookup.js"></script>
+<script src="js/academy.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
